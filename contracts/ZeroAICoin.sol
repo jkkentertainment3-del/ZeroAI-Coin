@@ -1,19 +1,20 @@
-// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.20;
+here// SPDX-License-Identifier: MIT
+// Compatible with OpenZeppelin Contracts ^5.6.0
+pragma solidity ^0.8.27;
 
-import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
+import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
+import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import {ERC20Burnable} from "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
 
-contract ZeroAICoin is ERC20, Ownable {
-
-    constructor(address initialOwner)
+contract ZeroAICoin is ERC20, ERC20Burnable, Ownable {
+    constructor(address recipient, address initialOwner)
         ERC20("Zero AI Coin", "ZAI")
         Ownable(initialOwner)
     {
-        _mint(initialOwner, 100000000 * 10 ** decimals());
+        _mint(recipient, 100000000 * 10 ** decimals());
     }
 
-    function burn(uint256 amount) public {
-        _burn(msg.sender, amount);
+    function mint(address to, uint256 amount) public onlyOwner {
+        _mint(to, amount);
     }
 }
